@@ -46,17 +46,20 @@ function App() {
         setGroups({ ...rest, [newName]: devices });
     }
 
-    const addDevice = () => {
-        // Logic to add a device or navigate to the Add Device page
-        // This can be updated based on your requirements
+    const addDeviceToGroup = (deviceName, groupName = 'Misc') => {
+        setGroups(prevGroups => {
+            const newGroups = { ...prevGroups };
+            if (!newGroups[groupName]) newGroups[groupName] = [];
+            newGroups[groupName].push(deviceName);
+            return newGroups;
+        });
     };
-
     return (
         <Router>
             <Routes>
                 <Route path="/" element={
                     <div className="App">
-                        <Header /> {/* Replace the existing header with the Header component */}
+                        <Header /> {/* Header component */}
                         <div className="group-controls">
                             <button className="add-group-button" onClick={addGroup}>Add Group</button>
                             <Link to="/add-device">
@@ -90,7 +93,9 @@ function App() {
                         </div>
                     </div>
                 } />
-                <Route path="/add-device" element={<AddDevicePage />} />
+                <Route path="/add-device" element={
+                    <AddDevicePage addDeviceToGroup={addDeviceToGroup} />
+                } />
             </Routes>
         </Router>
     );

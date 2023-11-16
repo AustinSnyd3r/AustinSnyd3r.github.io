@@ -3,8 +3,10 @@
     "",
     "\\src",
     "\\src\\AppHeader",
-    "\\src\\Pages"
+    "\\src\\Pages",
+    "\\src\\Pages\\Devices",
+    "\\src\\Pages\\Groups"
   ],
-  "SelectedNode": "\\src\\AppHeader\\Header.js",
+  "SelectedNode": "\\src\\Pages\\Groups\\App.js",
   "PreviewInSolutionExplorer": false
 }
