@@ -1,5 +1,6 @@
 ﻿import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import SliderButton from './SliderButton';
 import AddDevicePage from '../Devices/AddDevicePage';
 import Header from '../../AppHeader/Header';
 import '../../App.css';
@@ -54,6 +55,16 @@ function App() {
             return newGroups;
         });
     };
+
+    const [deviceStatuses, setDeviceStatuses] = useState({});
+
+    const toggleDeviceState = (groupName, deviceName) => {
+        setDeviceStatuses(prevStatuses => ({
+            ...prevStatuses,
+            [deviceName]: !prevStatuses[deviceName]
+        }));
+    };
+
     return (
         <Router>
             <Routes>
@@ -78,13 +89,11 @@ function App() {
                                         onBlur={(e) => editGroupName(groupName, e.target.value)}
                                     />
                                     {groups[groupName].map(device => (
-                                        <div
-                                            key={device}
-                                            draggable
-                                            onDragStart={(event) => onDragStart(event, device)}
-                                            className="device"
-                                        >
+                                        <div key={device} draggable onDragStart={(event) => onDragStart(event, device)} className="device">
                                             {device}
+                                            <SliderButton onClick={() => toggleDeviceState(groupName, device)}
+                                                initialState={deviceStatuses[device]}
+                                            />
                                         </div>
                                     ))}
                                     <button className="remove-group-button" onClick={() => removeGroup(groupName)}>Remove Group</button>
