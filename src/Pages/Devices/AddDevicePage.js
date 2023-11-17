@@ -2,7 +2,7 @@
 import Header from '../../AppHeader/Header';
 import '../../App.css';
 
-function AddDevicePage() {
+function AddDevicePage({ addDeviceToGroup }) {
     const [selectedDevice, setSelectedDevice] = useState('');
     const [groupName, setGroupName] = useState('');
 
@@ -12,8 +12,11 @@ function AddDevicePage() {
 
     const handleAddDevice = () => {
         // Logic to add the device to a group goes here
-        // This could involve calling a function passed down from a parent component
         console.log(`Adding ${selectedDevice} to ${groupName || 'Misc'} group`);
+
+        // Pass the selected device and group name to the parent component
+        addDeviceToGroup(selectedDevice, groupName || 'Misc');
+
         // Reset the selections after adding
         setSelectedDevice('');
         setGroupName('');
@@ -24,9 +27,9 @@ function AddDevicePage() {
             <Header />
             <div className="main-content">
                 <h2>Select a Device</h2>
-                <button onClick={() => handleDeviceSelect('Device A')}>Device A</button>
-                <button onClick={() => handleDeviceSelect('Device B')}>Device B</button>
-                <button onClick={() => handleDeviceSelect('Device C')}>Device C</button>
+                <button className="deviceButton" onClick={() => handleDeviceSelect('Device A')}>Device A</button>
+                <button className="deviceButton" onClick={() => handleDeviceSelect('Device B')}>Device B</button>
+                <button className="deviceButton" onClick={() => handleDeviceSelect('Device C')}>Device C</button>
 
                 <div>
                     <h3>Selected Device: {selectedDevice}</h3>
@@ -34,12 +37,13 @@ function AddDevicePage() {
 
                 <div>
                     <input
+                        className="groupNameInput"
                         type="text"
                         placeholder="Enter Group Name"
                         value={groupName}
                         onChange={(e) => setGroupName(e.target.value)}
                     />
-                    <button onClick={handleAddDevice}>Add Device</button>
+                    <button className="addBtn" onClick={handleAddDevice}>Add Device</button>
                 </div>
             </div>
         </div>
