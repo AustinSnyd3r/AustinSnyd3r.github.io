@@ -4,6 +4,7 @@ import SliderButton from './SliderButton';
 import AddDevicePage from '../Devices/AddDevicePage';
 import Header from '../../AppHeader/Header';
 import Profile from '../userProfile/ProfilePage';
+import Help from '../userHelp/Help';
 import '../../App.css';
 
 function App() {
@@ -170,6 +171,7 @@ function App() {
                     <AddDevicePage addDeviceToGroup={addDeviceToGroup} />
                 } />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/help" element={<Help />} />
             </Routes>
         </Router>
     );

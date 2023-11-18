@@ -30,7 +30,9 @@ function Menu() {
                             <Link to="/add-device" className="menu-item-link">
                                 <button className="menu-item">Add Device</button>
                             </Link>
-                            <button className="menu-item">Help</button>
+                            <Link to="/help" className="menu-item-link">
+                                <button className="menu-item">Help</button>
+                            </Link>
                         </div>
                     </div>
                 </div>
