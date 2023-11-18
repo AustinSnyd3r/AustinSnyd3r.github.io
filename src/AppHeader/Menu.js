@@ -21,7 +21,9 @@ function Menu() {
                             <button className="close-menu" onClick={toggleMenu}>&times;</button>
                         </div>
                         <div className="menu-items">
-                            <button className="menu-item">Profile</button>
+                            <Link to="/profile" className="menu-item-link">
+                                <button className="menu-item">Profile</button>
+                            </Link>
                             <Link to="/" className="menu-item-link">
                                 <button className="menu-item">Device Management</button>
                             </Link>

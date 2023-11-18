@@ -1,0 +1,39 @@
+
+.input-container {
+  margin-bottom: 15px;
+  margin-left: 10px; /* Adjust the margin-left to move content to the right */
+}
+
+.input-container label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.input-container input {
+  width: calc(100% - 16px); /* Adjust the input width to account for padding */
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.update-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.update-button:hover {
+  background-color: #45a049;
+}
+
+/* Styles for the success message */
+p {
+  color: #4caf50;
+  margin-top: 10px;
+}

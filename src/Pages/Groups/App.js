@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import SliderButton from './SliderButton';
 import AddDevicePage from '../Devices/AddDevicePage';
 import Header from '../../AppHeader/Header';
+import Profile from '../userProfile/ProfilePage';
 import '../../App.css';
 
 function App() {
@@ -172,6 +173,7 @@ function App() {
                 <Route path="/add-device" element={
                     <AddDevicePage addDeviceToGroup={addDeviceToGroup} />
                 } />
+                <Route path="/profile" element={<Profile />} />
             </Routes>
         </Router>
     );
