@@ -1,5 +1,3 @@
-/* Help.css */
-
 .help-container {
   text-align: center;
 }
@@ -9,8 +7,8 @@
 }
 
 .help-content {
-  margin: 0 auto; /* Center the content */
-  max-width: 800px; /* Adjust the maximum width as needed */
+  margin: 0 auto;
+  max-width: 800px;
 }
 
 .contact-info,
@@ -18,8 +16,12 @@
   margin-bottom: 30px;
 }
 
+
+.contact-info p,
+.faq-item p {
+  color: black;
+}
+
 .faq-item {
   margin-bottom: 20px;
 }
-
-/* Add more styling as needed */
