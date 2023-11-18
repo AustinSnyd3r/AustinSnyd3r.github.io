@@ -7,24 +7,39 @@ import Profile from '../userProfile/ProfilePage';
 import '../../App.css';
 
 function App() {
-    const [groups, setGroups] = useState({
-        Bedroom: [],
-        FamilyRoom: [],
-        Misc: ['Device 1', 'Device 2', 'Device 3']
-    });
+    const initialGroups = [
+        { id: 'misc', name: 'Misc', devices: ['Device 1', 'Device 2', 'Device 3'] },
+        { id: 'bedroom', name: 'Bedroom', devices: ['Bed Lamp', 'Alarm Clock'] },
+        { id: 'familyRoom', name: 'Family Room', devices: ['TV', 'Stereo System'] },
+        { id: 'diningRoom', name: 'Dining Room', devices: ['Chandelier', 'Smart Speaker'] },
+        { id: 'office', name: 'Office', devices: ['Desk Lamp', 'Computer', 'Printer'] },
+        { id: 'outside', name: 'Outside', devices: ['Garden Lights', 'Pool Speaker'] }
+    ];
+
+    const [groups, setGroups] = useState(initialGroups);
+    const [deviceStatuses, setDeviceStatuses] = useState({});
+    const [showDeviceManager, setShowDeviceManager] = useState(false);
+    const [selectedDevice, setSelectedDevice] = useState(null);
 
     const onDragOver = (event) => {
         event.preventDefault();
     }
 
-    const onDrop = (groupName, event) => {
+    const onDrop = (groupId, event) => {
         const deviceName = event.dataTransfer.getData("deviceName");
-        const newGroups = { ...groups };
-        Object.keys(groups).forEach(group => {
-            newGroups[group] = newGroups[group].filter(device => device !== deviceName);
-        });
-        newGroups[groupName].push(deviceName);
-        setGroups(newGroups);
+        setGroups(prevGroups => prevGroups.map(group => {
+            if (group.id === groupId) {
+                return {
+                    ...group,
+                    devices: [...group.devices, deviceName]
+                };
+            } else {
+                return {
+                    ...group,
+                    devices: group.devices.filter(device => device !== deviceName)
+                };
+            }
+        }));
     }
 
     const onDragStart = (event, deviceName) => {
@@ -33,31 +48,38 @@ function App() {
 
     const addGroup = () => {
         const newGroupName = prompt("Enter new group name:");
-        if (newGroupName && !groups[newGroupName]) {
-            setGroups({ ...groups, [newGroupName]: [] });
+        if (newGroupName) {
+            const newGroupId = newGroupName.toLowerCase().replace(/\s+/g, '');
+            setGroups([...groups, { id: newGroupId, name: newGroupName, devices: [] }]);
         }
     }
 
-    const removeGroup = (groupName) => {
-        const { [groupName]: _, ...newGroups } = groups;
-        setGroups(newGroups);
+    const removeGroup = (groupId) => {
+        setGroups(groups.filter(group => group.id !== groupId));
     }
 
-    const editGroupName = (oldName, newName) => {
-        const { [oldName]: devices, ...rest } = groups;
-        setGroups({ ...rest, [newName]: devices });
-    }
+    const editGroupName = (groupId, newName) => {
+        if (!newName.trim()) {
+            return;
+        }
+
+        setGroups(prevGroups =>
+            prevGroups.map(group =>
+                group.id === groupId ? { ...group, name: newName } : group
+            )
+        );
+    };
 
     const addDeviceToGroup = (deviceName, groupName = 'Misc') => {
         setGroups(prevGroups => {
-            const newGroups = { ...prevGroups };
-            if (!newGroups[groupName]) newGroups[groupName] = [];
-            newGroups[groupName].push(deviceName);
-            return newGroups;
+            return prevGroups.map(group => {
+                if (group.name === groupName) {
+                    return { ...group, devices: [...group.devices, deviceName] };
+                }
+                return group;
+            });
         });
     };
-
-    const [deviceStatuses, setDeviceStatuses] = useState({});
 
     const toggleDeviceState = (groupName, deviceName) => {
         setDeviceStatuses(prevStatuses => ({
@@ -66,38 +88,79 @@ function App() {
         }));
     };
 
+    const manageDevices = () => {
+        setShowDeviceManager(!showDeviceManager);
+        setSelectedDevice(null); // Reset selected device when toggling the device manager
+    };
+
+    const handleDeviceSelect = (deviceName) => {
+        setSelectedDevice(deviceName);
+    };
+
+    const assignDeviceToGroup = (groupName) => {
+        if (selectedDevice) {
+            addDeviceToGroup(selectedDevice, groupName);
+            setShowDeviceManager(false);
+            setSelectedDevice(null);
+        }
+    };
+
+    // Collect all devices for the manage devices list
+    const allDevices = groups.flatMap(group => group.devices);
+
     return (
         <Router>
             <Routes>
                 <Route path="/" element={
                     <div className="App">
-                        <Header /> {/* Header component */}
+                        <Header />
                         <div className="group-controls">
                             <button className="add-group-button" onClick={addGroup}>Add Group</button>
                             <Link to="/add-device">
                                 <button className="add-device-button">Add Device</button>
                             </Link>
+                            <button className="manage-devices-button" onClick={manageDevices}>Manage Devices</button>
                         </div>
+
+                        {showDeviceManager && (
+                            <div className="device-manager">
+                                {allDevices.map(device => (
+                                    <div key={device} className="device-item" onClick={() => handleDeviceSelect(device)}>
+                                        {device}
+                                    </div>
+                                ))}
+                                {selectedDevice && (
+                                    <div className="group-selector">
+                                        {groups.map(group => (
+                                            <div key={group.id} className="group-item" onClick={() => assignDeviceToGroup(group.name)}>
+                                                {group.name}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
                         <div className="device-groups">
-                            {Object.keys(groups).map((groupName, index) => (
-                                <div key={index}
+                            {groups.map(group => (
+                                <div key={group.id}
                                     className="device-group"
                                     onDragOver={onDragOver}
-                                    onDrop={(event) => onDrop(groupName, event)}>
+                                    onDrop={(event) => onDrop(group.id, event)}>
                                     <input
                                         type="text"
-                                        defaultValue={groupName}
-                                        onBlur={(e) => editGroupName(groupName, e.target.value)}
+                                        defaultValue={group.name}
+                                        onBlur={(e) => editGroupName(group.id, e.target.value)}
                                     />
-                                    {groups[groupName].map(device => (
+                                    {group.devices.map(device => (
                                         <div key={device} draggable onDragStart={(event) => onDragStart(event, device)} className="device">
                                             {device}
-                                            <SliderButton onClick={() => toggleDeviceState(groupName, device)}
+                                            <SliderButton onClick={() => toggleDeviceState(group.name, device)}
                                                 initialState={deviceStatuses[device]}
                                             />
                                         </div>
                                     ))}
-                                    <button className="remove-group-button" onClick={() => removeGroup(groupName)}>Remove Group</button>
+                                    <button className="remove-group-button" onClick={() => removeGroup(group.id)}>Remove Group</button>
                                 </div>
                             ))}
                         </div>
