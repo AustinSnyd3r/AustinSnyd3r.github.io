@@ -18,7 +18,7 @@ function Header() {
             <div className="menu-icon" onClick={toggleMenu}>
                 &#9776;
             </div>
-            Bluey
+            BlueSpace
             {menuVisible && <Menu toggleMenu={toggleMenu} />}
         </header>
     );
