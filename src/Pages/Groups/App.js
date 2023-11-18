@@ -9,13 +9,16 @@ function App() {
     const initialGroups = [
         { id: 'misc', name: 'Misc', devices: ['Device 1', 'Device 2', 'Device 3'] },
         { id: 'bedroom', name: 'Bedroom', devices: ['Bed Lamp', 'Alarm Clock'] },
-        { id: 'familyRoom', name: 'FamilyRoom', devices: ['TV', 'Stereo System'] },
-        { id: 'diningRoom', name: 'DiningRoom', devices: ['Chandelier', 'Smart Speaker'] },
+        { id: 'familyRoom', name: 'Family Room', devices: ['TV', 'Stereo System'] },
+        { id: 'diningRoom', name: 'Dining Room', devices: ['Chandelier', 'Smart Speaker'] },
         { id: 'office', name: 'Office', devices: ['Desk Lamp', 'Computer', 'Printer'] },
         { id: 'outside', name: 'Outside', devices: ['Garden Lights', 'Pool Speaker'] }
     ];
 
     const [groups, setGroups] = useState(initialGroups);
+    const [deviceStatuses, setDeviceStatuses] = useState({});
+    const [showDeviceManager, setShowDeviceManager] = useState(false);
+    const [selectedDevice, setSelectedDevice] = useState(null);
 
     const onDragOver = (event) => {
         event.preventDefault();
@@ -77,14 +80,32 @@ function App() {
         });
     };
 
-    const [deviceStatuses, setDeviceStatuses] = useState({});
-
     const toggleDeviceState = (groupName, deviceName) => {
         setDeviceStatuses(prevStatuses => ({
             ...prevStatuses,
             [deviceName]: !prevStatuses[deviceName]
         }));
     };
+
+    const manageDevices = () => {
+        setShowDeviceManager(!showDeviceManager);
+        setSelectedDevice(null); // Reset selected device when toggling the device manager
+    };
+
+    const handleDeviceSelect = (deviceName) => {
+        setSelectedDevice(deviceName);
+    };
+
+    const assignDeviceToGroup = (groupName) => {
+        if (selectedDevice) {
+            addDeviceToGroup(selectedDevice, groupName);
+            setShowDeviceManager(false);
+            setSelectedDevice(null);
+        }
+    };
+
+    // Collect all devices for the manage devices list
+    const allDevices = groups.flatMap(group => group.devices);
 
     return (
         <Router>
@@ -97,7 +118,28 @@ function App() {
                             <Link to="/add-device">
                                 <button className="add-device-button">Add Device</button>
                             </Link>
+                            <button className="manage-devices-button" onClick={manageDevices}>Manage Devices</button>
                         </div>
+
+                        {showDeviceManager && (
+                            <div className="device-manager">
+                                {allDevices.map(device => (
+                                    <div key={device} className="device-item" onClick={() => handleDeviceSelect(device)}>
+                                        {device}
+                                    </div>
+                                ))}
+                                {selectedDevice && (
+                                    <div className="group-selector">
+                                        {groups.map(group => (
+                                            <div key={group.id} className="group-item" onClick={() => assignDeviceToGroup(group.name)}>
+                                                {group.name}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
                         <div className="device-groups">
                             {groups.map(group => (
                                 <div key={group.id}
