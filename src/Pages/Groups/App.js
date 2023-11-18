@@ -7,6 +7,13 @@ import Profile from '../userProfile/ProfilePage';
 import Help from '../userHelp/Help';
 import '../../App.css';
 
+/*
+    Home page of the app. Displays the items in groups, 
+    user can turn their devices on and off.
+    users can connect new devices by navigating to the add device page
+    users can create new groups by clicking the add group button
+*/
+
 function App() {
     const initialGroups = [
         { id: 'uncategorized', name: 'Uncategorized', devices: ['Device 1', 'Device 2', 'Device 3'] },
@@ -56,6 +63,13 @@ function App() {
         }
     }
 
+    const addGroupF = (groupName) => {
+        if(groupName){
+            const newGroupId = groupName.toLowerCase().replace(/\s+/g, '');
+            setGroups([...groups, { id: newGroupId, name: groupName, devices: [] }]);
+        }
+    }
+    
     const removeGroup = (groupId) => {
         setGroups(groups.filter(group => group.id !== groupId));
     }
@@ -188,7 +202,8 @@ function App() {
                     </div>
                 } />
                 <Route path="/add-device" element={
-                    <AddDevicePage addDeviceToGroup={addDeviceToGroup} />
+                    <AddDevicePage addDeviceToGroup={addDeviceToGroup}  addGroupF ={addGroupF}/>
+                    
                 } />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/help" element={<Help />} />
