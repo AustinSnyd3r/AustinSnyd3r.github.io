@@ -2,7 +2,13 @@
 import Header from '../../AppHeader/Header';
 import '../../App.css';
 
-function AddDevicePage({ addDeviceToGroup }) {
+/*  
+    This is the AddDevicePage, this is where users are able to add
+    devices to groups, or make new groups to add devices.
+    It currently has hardcoded devices, these are to mimic
+    bluetooth detected devices that the user can pair
+*/
+function AddDevicePage({ addDeviceToGroup, addGroupF }) {
     const [selectedDevice, setSelectedDevice] = useState('');
     const [groupName, setGroupName] = useState('');
 
@@ -11,12 +17,19 @@ function AddDevicePage({ addDeviceToGroup }) {
     };
 
     const handleAddDevice = () => {
+        //input validation
+        if (!selectedDevice) {
+            alert('Please select a device');
+            return;
+        }
+
         // Logic to add the device to a group goes here
-        console.log(`Adding ${selectedDevice} to ${groupName || 'Misc'} group`);
-
-        // Pass the selected device and group name to the parent component
-        addDeviceToGroup(selectedDevice, groupName || 'Misc');
-
+        console.log(`Adding ${selectedDevice} to ${groupName} group`);
+        //add device to existing group or make one
+        addDeviceToGroup(selectedDevice, groupName || selectedDevice, addGroupF(groupName));
+        
+        alert(`Added ${selectedDevice} to ${groupName || 'Misc'} group`);
+        
         // Reset the selections after adding
         setSelectedDevice('');
         setGroupName('');
