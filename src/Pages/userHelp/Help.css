@@ -1,0 +1,25 @@
+/* Help.css */
+
+.help-container {
+  text-align: center;
+}
+
+.header-container {
+  margin-bottom: 20px;
+}
+
+.help-content {
+  margin: 0 auto; /* Center the content */
+  max-width: 800px; /* Adjust the maximum width as needed */
+}
+
+.contact-info,
+.faqs {
+  margin-bottom: 30px;
+}
+
+.faq-item {
+  margin-bottom: 20px;
+}
+
+/* Add more styling as needed */
