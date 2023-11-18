@@ -20,6 +20,7 @@ function App() {
     const [deviceStatuses, setDeviceStatuses] = useState({});
     const [showDeviceManager, setShowDeviceManager] = useState(false);
     const [selectedDevice, setSelectedDevice] = useState(null);
+    const [viewAllGroupDevices, setViewAllGroupDevices] = useState(null);
 
     const onDragOver = (event) => {
         event.preventDefault();
@@ -105,6 +106,12 @@ function App() {
         }
     };
 
+    const handleViewAllClick = (groupId) => {
+        const group = groups.find(group => group.id === groupId);
+        setViewAllGroupDevices(group);
+        setShowDeviceManager(true);
+    };
+
     // Collect all devices for the manage devices list
     const allDevices = groups.flatMap(group => group.devices);
 
@@ -124,19 +131,28 @@ function App() {
 
                         {showDeviceManager && (
                             <>
-                                <div className="backdrop" onClick={() => setShowDeviceManager(false)}></div>
+                                <div className="backdrop" onClick={() => { setShowDeviceManager(false); setViewAllGroupDevices(null); }}></div>
                                 <div className="device-manager">
-                                    {!selectedDevice ? (
-                                        allDevices.map(device => (
-                                            <div key={device} className="device-item" onClick={() => handleDeviceSelect(device)}>
-                                                {device}
-                                            </div>
-                                        ))
-                                    ) : (
+                                    {!selectedDevice && !viewAllGroupDevices && allDevices.map(device => (
+                                        <div key={device} className="device-item" onClick={() => handleDeviceSelect(device)}>
+                                            {device}
+                                        </div>
+                                    ))}
+                                    {selectedDevice && (
                                         <div className="group-selector">
                                             {groups.map(group => (
                                                 <div key={group.id} className="group-item" onClick={() => assignDeviceToGroup(group.name)}>
                                                     {group.name}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                    {viewAllGroupDevices && (
+                                        <div className="view-all-devices">
+                                            <h2>{viewAllGroupDevices.name} Devices</h2>
+                                            {viewAllGroupDevices.devices.map(device => (
+                                                <div key={device} className="device-item">
+                                                    {device}
                                                 </div>
                                             ))}
                                         </div>
@@ -147,16 +163,13 @@ function App() {
 
                         <div className="device-groups">
                             {groups.map(group => (
-                                <div key={group.id}
-                                    className="device-group"
-                                    onDragOver={onDragOver}
-                                    onDrop={(event) => onDrop(group.id, event)}>
+                                <div key={group.id} className="device-group" onDragOver={onDragOver} onDrop={(event) => onDrop(group.id, event)}>
                                     <input
                                         type="text"
                                         defaultValue={group.name}
                                         onBlur={(e) => editGroupName(group.id, e.target.value)}
                                     />
-                                    {group.devices.map(device => (
+                                    {group.devices.slice(0, 3).map(device => (
                                         <div key={device} draggable onDragStart={(event) => onDragStart(event, device)} className="device">
                                             {device}
                                             <SliderButton onClick={() => toggleDeviceState(group.name, device)}
@@ -164,6 +177,9 @@ function App() {
                                             />
                                         </div>
                                     ))}
+                                    {group.devices.length > 3 && (
+                                        <a href="#" className="view-all-link" onClick={(e) => { e.preventDefault(); handleViewAllClick(group.id); }}>View All</a>
+                                    )}
                                     <button className="remove-group-button" onClick={() => removeGroup(group.id)}>Remove Group</button>
                                 </div>
                             ))}
