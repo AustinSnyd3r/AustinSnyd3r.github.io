@@ -7,7 +7,7 @@ import '../../App.css';
 
 function App() {
     const initialGroups = [
-        { id: 'misc', name: 'Misc', devices: ['Device 1', 'Device 2', 'Device 3'] },
+        { id: 'uncategorized', name: 'Uncategorized', devices: ['Device 1', 'Device 2', 'Device 3'] },
         { id: 'bedroom', name: 'Bedroom', devices: ['Bed Lamp', 'Alarm Clock'] },
         { id: 'familyRoom', name: 'Family Room', devices: ['TV', 'Stereo System'] },
         { id: 'diningRoom', name: 'Dining Room', devices: ['Chandelier', 'Smart Speaker'] },
@@ -122,22 +122,26 @@ function App() {
                         </div>
 
                         {showDeviceManager && (
-                            <div className="device-manager">
-                                {allDevices.map(device => (
-                                    <div key={device} className="device-item" onClick={() => handleDeviceSelect(device)}>
-                                        {device}
-                                    </div>
-                                ))}
-                                {selectedDevice && (
-                                    <div className="group-selector">
-                                        {groups.map(group => (
-                                            <div key={group.id} className="group-item" onClick={() => assignDeviceToGroup(group.name)}>
-                                                {group.name}
+                            <>
+                                <div className="backdrop" onClick={() => setShowDeviceManager(false)}></div>
+                                <div className="device-manager">
+                                    {!selectedDevice ? (
+                                        allDevices.map(device => (
+                                            <div key={device} className="device-item" onClick={() => handleDeviceSelect(device)}>
+                                                {device}
                                             </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="group-selector">
+                                            {groups.map(group => (
+                                                <div key={group.id} className="group-item" onClick={() => assignDeviceToGroup(group.name)}>
+                                                    {group.name}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </>
                         )}
 
                         <div className="device-groups">
