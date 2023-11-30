@@ -22,20 +22,27 @@ function AddDevicePage({ addDeviceToGroup, addGroupF, groups }) {
             alert('Please select a device');
             return;
         }
-        const existingGroup = groups.find(group => group.name === groupName);
 
-        // Logic to add the device to a group goes here
-        console.log(`Adding ${selectedDevice} to ${groupName} group`);
-        //add device to existing group or make one
-        if(existingGroup){
-            addDeviceToGroup(selectedDevice, groupName);
+        if (!groupName) {
+            addDeviceToGroup(selectedDevice, "Uncategorized");
         }
         else{
-            addGroupF(groupName);
-            addDeviceToGroup(selectedDevice, groupName);
+            const existingGroup = groups.find(group => group.name === groupName);
+
+            // Logic to add the device to a group goes here
+            console.log(`Adding ${selectedDevice} to ${groupName} group`);
+            //add device to existing group or make one
+            if(existingGroup){
+                addDeviceToGroup(selectedDevice, groupName);
+            }
+            else{
+                addGroupF(groupName);
+                addDeviceToGroup(selectedDevice, groupName);
+            }
         }
+
         
-        alert(`Added ${selectedDevice} to ${groupName || 'Misc'} group`);
+        alert(`Added ${selectedDevice} to ${groupName || 'Uncategorized'} group`);
         
         // Reset the selections after adding
         setSelectedDevice('');
