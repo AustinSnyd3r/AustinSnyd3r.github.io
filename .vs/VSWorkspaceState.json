@@ -1,12 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\src",
     "\\src\\AppHeader",
     "\\src\\Pages",
     "\\src\\Pages\\Devices",
     "\\src\\Pages\\Groups"
   ],
-  "SelectedNode": "\\src\\Pages\\Devices\\AddDevicePage.js",
+  "SelectedNode": "\\src",
   "PreviewInSolutionExplorer": false
 }

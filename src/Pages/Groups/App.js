@@ -14,18 +14,29 @@ import '../../App.css';
     users can create new groups by clicking the add group button
 */
 
-function App() {
-    const initialGroups = [
-        { id: 'uncategorized', name: 'Uncategorized', devices: ['Device 1', 'Device 2', 'Device 3'] },
-        { id: 'bedroom', name: 'Bedroom', devices: ['Bed Lamp', 'Alarm Clock'] },
-        { id: 'familyRoom', name: 'Family Room', devices: ['TV', 'Stereo System'] },
-        { id: 'diningRoom', name: 'Dining Room', devices: ['Chandelier', 'Smart Speaker'] },
-        { id: 'office', name: 'Office', devices: ['Desk Lamp', 'Computer', 'Printer'] },
-        { id: 'outside', name: 'Outside', devices: ['Garden Lights', 'Pool Speaker'] }
-    ];
+const initialGroups = [
+    { id: 'uncategorized', name: 'Uncategorized', devices: ['Device 1', 'Device 2', 'Device 3'] },
+    { id: 'bedroom', name: 'Bedroom', devices: ['Bed Lamp', 'Alarm Clock'] },
+    { id: 'familyRoom', name: 'Family Room', devices: ['TV', 'Stereo System'] },
+    { id: 'diningRoom', name: 'Dining Room', devices: ['Chandelier', 'Smart Speaker'] },
+    { id: 'office', name: 'Office', devices: ['Desk Lamp', 'Computer', 'Printer'] },
+    { id: 'outside', name: 'Outside', devices: ['Garden Lights', 'Pool Speaker'] }
+];
 
+function App() {
+
+    let initialDeviceStatuses = {};
+
+    initialGroups.forEach(group => {
+        group.devices.forEach(device => {
+            if (!initialDeviceStatuses[device] === undefined) {
+                initialDeviceStatuses[device] = false; // Assuming all devices are initially off
+            }
+        });
+    });
+
+    const [deviceStatuses, setDeviceStatuses] = useState(initialDeviceStatuses);
     const [groups, setGroups] = useState(initialGroups);
-    const [deviceStatuses, setDeviceStatuses] = useState({});
     const [showDeviceManager, setShowDeviceManager] = useState(false);
     const [selectedDevice, setSelectedDevice] = useState(null);
     const [viewAllGroupDevices, setViewAllGroupDevices] = useState(null);
@@ -33,6 +44,21 @@ function App() {
     const onDragOver = (event) => {
         event.preventDefault();
     }
+
+    const onDragEndRemove = (deviceName) => {
+        setGroups(prevGroups => prevGroups.map(group => {
+            return {
+                ...group,
+                devices: group.devices.filter(device => device !== deviceName)
+            };
+        }));
+        if (viewAllGroupDevices) {
+            setViewAllGroupDevices(prev => ({
+                ...prev,
+                devices: prev.devices.filter(device => device !== deviceName)
+            }));
+        }
+    };
 
     const onDrop = (groupId, event) => {
         const deviceName = event.dataTransfer.getData("deviceName");
@@ -97,7 +123,7 @@ function App() {
         });
     };
 
-    const toggleDeviceState = (groupName, deviceName) => {
+    const toggleDeviceState = (deviceName) => {
         setDeviceStatuses(prevStatuses => ({
             ...prevStatuses,
             [deviceName]: !prevStatuses[deviceName]
@@ -166,8 +192,13 @@ function App() {
                                         <div className="view-all-devices">
                                             <h2>{viewAllGroupDevices.name} Devices</h2>
                                             {viewAllGroupDevices.devices.map(device => (
-                                                <div key={device} className="device-item">
+                                                <div key={device} className="device-item" draggable
+                                                    onDragStart={(event) => onDragStart(event, device)}
+                                                    onDragEnd={() => onDragEndRemove(device)}>
                                                     {device}
+                                                    <SliderButton onClick={() => toggleDeviceState(device)}
+                                                        initialState={deviceStatuses[device]}
+                                                    />
                                                 </div>
                                             ))}
                                         </div>
@@ -184,10 +215,11 @@ function App() {
                                         defaultValue={group.name}
                                         onBlur={(e) => editGroupName(group.id, e.target.value)}
                                     />
-                                    {group.devices.slice(0, 3).map(device => (
-                                        <div key={device} draggable onDragStart={(event) => onDragStart(event, device)} className="device">
+                                    {group.devices.map(device => (
+                                        <div key={device} className="device" draggable onDragStart={(event) => onDragStart(event, device)}>
                                             {device}
-                                            <SliderButton onClick={() => toggleDeviceState(group.name, device)}
+                                            <SliderButton
+                                                onClick={() => toggleDeviceState(device)}
                                                 initialState={deviceStatuses[device]}
                                             />
                                         </div>
