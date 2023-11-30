@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '../../AppHeader/Header';
 import './ProfilePage.css';
 
 
 function Profile() {
+    const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [deviceName, setDeviceName] = useState('');
@@ -94,6 +96,9 @@ function Profile() {
                     {updated.deviceName && <p>Device name updated successfully!</p>}
                 </div>
             </div>
+            <button className="home-button" onClick={() => navigate('/')}>
+                Return Home
+            </button>
         </div>
     );
 }

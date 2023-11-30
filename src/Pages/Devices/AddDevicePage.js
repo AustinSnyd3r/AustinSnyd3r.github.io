@@ -1,4 +1,5 @@
 ﻿import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '../../AppHeader/Header';
 import '../../App.css';
 
@@ -11,6 +12,7 @@ import '../../App.css';
 function AddDevicePage({ addDeviceToGroup, addGroupF, groups }) {
     const [selectedDevice, setSelectedDevice] = useState('');
     const [groupName, setGroupName] = useState('');
+    const navigate = useNavigate();
 
     const handleDeviceSelect = (deviceName) => {
         setSelectedDevice(deviceName);
@@ -73,6 +75,9 @@ function AddDevicePage({ addDeviceToGroup, addGroupF, groups }) {
                     <button className="addBtn" onClick={handleAddDevice}>Add Device</button>
                 </div>
             </div>
+            <button className="home-button" onClick={() => navigate('/')}>
+                Return Home
+            </button>
         </div>
     );
 }

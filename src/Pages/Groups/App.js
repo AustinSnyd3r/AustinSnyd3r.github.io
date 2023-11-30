@@ -15,7 +15,7 @@ import '../../App.css';
 */
 
 const initialGroups = [
-    { id: 'uncategorized', name: 'Uncategorized', devices: ['Device 1', 'Device 2', 'Device 3'] },
+    { id: 'uncategorized', name: 'Uncategorized', devices: ['Device 1', 'Device 2'] },
     { id: 'bedroom', name: 'Bedroom', devices: ['Bed Lamp', 'Alarm Clock'] },
     { id: 'familyRoom', name: 'Family Room', devices: ['TV', 'Stereo System'] },
     { id: 'diningRoom', name: 'Dining Room', devices: ['Chandelier', 'Smart Speaker'] },

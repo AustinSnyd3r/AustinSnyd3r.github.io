@@ -1,8 +1,12 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '../../AppHeader/Header';
 import './Help.css';
 
 function Help() {
+
+    const navigate = useNavigate();
+
     return (
         <div className="help-container">
             <div className="header-container">
@@ -47,6 +51,9 @@ function Help() {
 
                 </div>
             </div>
+            <button className="home-button" onClick={() => navigate('/')}>
+                Return Home
+            </button>
         </div>
     );
 }
