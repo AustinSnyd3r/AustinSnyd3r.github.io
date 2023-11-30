@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import SliderButton from './SliderButton';
 import AddDevicePage from '../Devices/AddDevicePage';
 import Header from '../../AppHeader/Header';
-import Profile from '../userProfile/ProfilePage';
 import Help from '../userHelp/Help';
+import Profile from '../userProfile/ProfilePage';
 import '../../App.css';
 
 /*
@@ -202,7 +202,7 @@ function App() {
                     </div>
                 } />
                 <Route path="/add-device" element={
-                    <AddDevicePage addDeviceToGroup={addDeviceToGroup}  addGroupF ={addGroupF}/>
+                    <AddDevicePage addDeviceToGroup={addDeviceToGroup}  addGroupF ={addGroupF} groups = {groups}/>
                     
                 } />
                 <Route path="/profile" element={<Profile />} />
