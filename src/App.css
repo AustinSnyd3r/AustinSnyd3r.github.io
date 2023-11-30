@@ -298,3 +298,19 @@
     .home-button:hover {
         background-color: #0056b3; /* Darker blue on hover */
     }
+
+.remove-device-button {
+    background-color: #dc3545; /* Red color */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+    .remove-device-button:hover {
+        background-color: #c82333; /* Darker red on hover */
+    }
