@@ -8,7 +8,7 @@ import '../../App.css';
     It currently has hardcoded devices, these are to mimic
     bluetooth detected devices that the user can pair
 */
-function AddDevicePage({ addDeviceToGroup, addGroupF }) {
+function AddDevicePage({ addDeviceToGroup, addGroupF, groups }) {
     const [selectedDevice, setSelectedDevice] = useState('');
     const [groupName, setGroupName] = useState('');
 
@@ -22,11 +22,18 @@ function AddDevicePage({ addDeviceToGroup, addGroupF }) {
             alert('Please select a device');
             return;
         }
+        const existingGroup = groups.find(group => group.name === groupName);
 
         // Logic to add the device to a group goes here
         console.log(`Adding ${selectedDevice} to ${groupName} group`);
         //add device to existing group or make one
-        addDeviceToGroup(selectedDevice, groupName || selectedDevice, addGroupF(groupName));
+        if(existingGroup){
+            addDeviceToGroup(selectedDevice, groupName);
+        }
+        else{
+            addGroupF(groupName);
+            addDeviceToGroup(selectedDevice, groupName);
+        }
         
         alert(`Added ${selectedDevice} to ${groupName || 'Misc'} group`);
         
