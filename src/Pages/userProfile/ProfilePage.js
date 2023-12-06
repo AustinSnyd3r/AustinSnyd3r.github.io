@@ -96,7 +96,7 @@ function Profile() {
                     {updated.deviceName && <p>Device name updated successfully!</p>}
                 </div>
             </div>
-            <button className="home-button" onClick={() => navigate('/')}>
+            <button className="home-button" onClick={() => navigate('/')} style={{ display: 'block', margin: '0 auto' }}>
                 Return Home
             </button>
         </div>

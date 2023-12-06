@@ -1,11 +1,13 @@
 {
   "ExpandedNodes": [
     "",
+    "\\src",
     "\\src\\AppHeader",
     "\\src\\Pages",
     "\\src\\Pages\\Devices",
-    "\\src\\Pages\\Groups"
+    "\\src\\Pages\\Groups",
+    "\\src\\Pages\\userHelp"
   ],
-  "SelectedNode": "\\src",
+  "SelectedNode": "\\src\\Pages\\Groups\\App.js",
   "PreviewInSolutionExplorer": false
 }
